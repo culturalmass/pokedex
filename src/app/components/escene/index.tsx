@@ -46,10 +46,10 @@ const Model = ({ user, id, limit, sticker, favorites }: ModelProps) => {
       <OrbitControls
         target={[0, 0.35, 0.35]}
         enablePan={false}
-        maxAzimuthAngle={0.4 * Math.PI}
-        minAzimuthAngle={-0.45 * Math.PI}
+        maxAzimuthAngle={0.085 * Math.PI}
+        minAzimuthAngle={-0.045 * Math.PI}
         maxPolarAngle={1.85}
-        minPolarAngle={1.05}
+        minPolarAngle={1.45}
         minDistance={6.9}
         maxDistance={8}
       />
