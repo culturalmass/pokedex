@@ -1,5 +1,8 @@
+"use server";
+
+import { notFound } from "next/navigation";
+import getCurrentUser from "@/actions/getCurrentUser";
 import { PaginationWrapper } from "@/app/components/home/pagination-wrapper";
-import React from "react";
 
 interface PageProps {
   params: {
@@ -7,11 +10,15 @@ interface PageProps {
   };
 }
 
-const Page = ({ params }: PageProps) => {
+const Page = async ({ params }: PageProps) => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    notFound();
+  }
+
   const state = {
     page: params.pageNumber,
-    index: 10,
-    currentId: params.pageNumber * 10,
   };
   return (
     <>

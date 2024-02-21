@@ -1,62 +1,83 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
+import { Session } from "next-auth";
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies";
+import { useProgress } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-
-import {
-  CubeCamera,
-  Environment,
-  Html,
-  Image,
-  OrbitControls,
-  PerspectiveCamera,
-  Text,
-} from "@react-three/drei";
-
+import NextImage from "next/image";
+import { Html, OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import PokedexModel from "./pokedex-model";
-import { AmbientLight, Light, LightProbe } from "three";
-import { useParams } from "next/navigation";
-import { getPokemonById } from "@/actions/getPokemon";
+import EmbedeedContent from "./embedded/embedeed-content";
+import { useRouter } from "next/navigation";
+import LoadingScreenPokedex from "./loading-screen";
 
-const Model = () => {
-  const { id } = useParams();
-  const [pokemon, setPokemon] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+export interface ModelProps {
+  user: Session | null;
+  id: string;
+  limit: string;
+  sticker: RequestCookie | undefined;
+  favorites: RequestCookie | undefined;
+}
 
-  // pokemon?.sprites?.other?.showdown?.front_default
-  console.log(pokemon !== null);
+const Model = ({ user, id, limit, sticker, favorites }: ModelProps) => {
+  const [currentId, setCurrentId] = useState(id?.toString().split("%")[0]);
+  const router = useRouter();
 
-  useEffect(() => {
-    setIsLoading(true);
-    getPokemonById(id)
-      .then((pokemon) => {
-        setPokemon(pokemon);
-      })
-      .finally(() => setIsLoading(false));
-  }, [id]);
+  const handleChangeId = (amount: number) => {
+    if (Number(currentId) + amount <= 0) {
+      return;
+    }
+    if (Number(currentId) + amount > Number(limit)) {
+      return;
+    }
+    let newId = (Number(currentId) + amount).toString();
+    let newUrl = `/pokedex/${newId}&limit=${limit}`;
+    setCurrentId(newId);
+    window.history.replaceState(
+      { ...window.history.state, as: newUrl, url: newUrl },
+      "",
+      newUrl
+    );
+  };
 
   return (
     <>
-      <OrbitControls target={[0, 0.35, 0.35]} maxPolarAngle={1.45} />
-      {/* <PerspectiveCamera makeDefault fov={50} position={[3, 2, 5]} /> */}
+      <OrbitControls
+        target={[0, 0.35, 0.35]}
+        enablePan={false}
+        maxAzimuthAngle={0.4 * Math.PI}
+        minAzimuthAngle={-0.45 * Math.PI}
+        maxPolarAngle={1.85}
+        minPolarAngle={1.05}
+        minDistance={6.9}
+        maxDistance={8}
+      />
+      <PerspectiveCamera makeDefault fov={55} position={[0, -0.2, 5]} />
 
       <ambientLight intensity={2.5} />
 
       <PokedexModel />
-      {/* <Html position={[0.5, 0.5, 0.1]} transform occlude>
-        <h1>hello</h1>
-        <p>world</p>
-      </Html> */}
-
-      {!isLoading && pokemon !== null && (
-        <Image
-          url={pokemon?.sprites?.front_default}
-          position={[-0.1, 0.45, 0.08]}
-          rotation={[0, 0.08, 0]}
-          scale={1.7}
-          className="bg-black"
+      <Html position={[1.0, 2.5, 0.2]} rotation={[0.1, 0, 0]} transform>
+        <div className="absolute select-none pointer-events-none h-[35px] w-[35px]">
+          <NextImage
+            src={!!user && !!sticker ? sticker.value : "/stickersPA/sPA12.png"}
+            alt="sprites"
+            fill
+            className="object-contain"
+          />
+        </div>
+      </Html>
+      <Html position={[0.5, -0.5, -0.2]} rotation={[0.1, 0, 0]} transform>
+        <EmbedeedContent
+          user={user}
+          id={currentId}
+          router={router}
+          currentLimit={limit}
+          handleChangeId={handleChangeId}
+          favorites={favorites}
         />
-      )}
+      </Html>
 
       <spotLight
         color={[1, 0.25, 0.7]}
@@ -71,13 +92,24 @@ const Model = () => {
   );
 };
 
-export const Scene = () => {
+export const Scene = ({ user, id, limit, sticker, favorites }: ModelProps) => {
+  const { progress } = useProgress();
   return (
-    <Suspense fallback={null}>
+    <>
       <Canvas shadows>
-        <Model />
+        <Suspense fallback={null}>
+          <Model
+            user={user}
+            id={id}
+            limit={limit}
+            sticker={sticker}
+            favorites={favorites}
+          />
+        </Suspense>
       </Canvas>
-    </Suspense>
+
+      <LoadingScreenPokedex progress={progress} />
+    </>
   );
 };
 

@@ -1,11 +1,6 @@
-import getCurrentUser from "@/actions/getCurrentUser";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import React from "react";
 import Auth from "../authorization/auth";
-import { signOut } from "next-auth/react";
-import { PiSignOut } from "react-icons/pi";
 import { User } from "./user";
+import getCurrentUser from "@/actions/getCurrentUser";
 
 export const Actions = async () => {
   const session = await getCurrentUser();

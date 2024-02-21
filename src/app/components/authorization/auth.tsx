@@ -2,11 +2,10 @@
 
 import { signIn, useSession, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import AuthSocialButton from "./auth-social-button";
 
 import { BsGithub, BsGoogle } from "react-icons/bs";
-import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 const Auth = () => {
   const session = useSession();
@@ -18,20 +17,13 @@ const Auth = () => {
         if (callback?.error) {
           toast.error("Invalid credentials");
         }
+        console.log(callback);
         if (callback?.ok && !callback?.error) {
           toast.success("Logged in!");
         }
       })
       .finally(() => setIsLoading(false));
   };
-
-  useEffect(() => {
-    if (session?.status === "authenticated") {
-      // console.log("isAuthenticated", session);
-    } else {
-      // console.log("isNotAuthenticated", session);
-    }
-  }, [session?.status]);
 
   return (
     <>

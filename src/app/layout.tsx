@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Advent_Pro } from "next/font/google";
-import { ThemeProvider } from "./components/theme/theme-provider";
-
-import "./globals.css";
 import AuthContext from "./context/AuthContext";
+import { ThemeProvider } from "./components/theme/theme-provider";
 import { Navbar } from "./components/navbar";
+import { Toaster } from "sonner";
+import "./globals.css";
 
 const advent = Advent_Pro({ subsets: ["latin"] });
 
@@ -28,6 +28,7 @@ export default function RootLayout({
             storageKey="streamingApp-theme"
           >
             <Navbar />
+            <Toaster theme="light" position="top-right" />
             <div className="flex h-full pt-20">{children}</div>
           </ThemeProvider>
         </AuthContext>

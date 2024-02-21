@@ -1,17 +1,24 @@
+"use server";
+import { cookies } from "next/headers";
+import getCurrentUser from "@/actions/getCurrentUser";
+import { InfiniteScrollWrapper } from "../components/home/infinite-scroll-wrapper";
 import { PaginationWrapper } from "../components/home/pagination-wrapper";
 
-export default function Home() {
+export default async function Home() {
+  const user = await getCurrentUser();
+  const navigation = cookies().get("navigation");
+
   const initialState = {
     page: 0,
-    index: 10,
-    currentId: 0,
   };
 
   return (
     <main>
-      <section>
+      {!!user && navigation?.value === "1" ? (
         <PaginationWrapper state={initialState} />
-      </section>
+      ) : (
+        <InfiniteScrollWrapper state={initialState} />
+      )}
     </main>
   );
 }

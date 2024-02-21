@@ -1,6 +1,7 @@
 "use client";
-import { Button } from "@/components/ui/button";
+
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 import { FaStepBackward } from "react-icons/fa";
 
 interface BackwardProps {
@@ -10,6 +11,10 @@ interface BackwardProps {
 export const Backward = ({ page }: BackwardProps) => {
   const router = useRouter();
   const handleClick = () => {
+    if (Number(page) === 1) {
+      router.push("/");
+      return;
+    }
     router.push(`/page/${Number(page) - 1}`);
   };
   return (

@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { Poppins } from "next/font/google";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export const Logo = () => {
@@ -10,7 +8,8 @@ export const Logo = () => {
         <div className="mr-12 shrink-0 lg:mr-0 lg:shrink">
           <Image
             src="/stickersPA/sPA61.png"
-            alt="pokedx-icon"
+            alt="pokedex-icon"
+            priority={true}
             height="70"
             width="70"
           />
