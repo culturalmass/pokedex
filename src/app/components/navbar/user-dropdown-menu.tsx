@@ -21,7 +21,7 @@ export const UserDropdownMenu = ({ user }: User) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Image
-          src={user.image!}
+          src={user?.image as string}
           alt="user-icon"
           width={24}
           height={24}
