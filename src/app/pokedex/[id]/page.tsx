@@ -15,7 +15,8 @@ export async function generateMetadata({
   const currentId = params?.id?.toString().split("%")[0]
   const pokemon = await getPokemonByName(currentId)
   return {
-    title: pokemon.title,
+    title: pokemon.name,
+    description: "From the Pokedex with a twist!",
     openGraph: {
       images: pokemon?.sprites?.other?.home?.front_default,
     },
