@@ -1,13 +1,25 @@
 "use server"
+import { Metadata } from "next"
 import getCurrentUser from "@/actions/getCurrentUser"
 import { cookies } from "next/headers"
 import Scene from "../../components/escene"
 import { getPokemonByName } from "@/actions/getPokemon"
 
-import Head from "next/head"
-
 interface PokedexProps {
   params: { id: string }
+}
+
+export async function generateMetadata({
+  params,
+}: PokedexProps): Promise<Metadata> {
+  const currentId = params?.id?.toString().split("%")[0]
+  const pokemon = await getPokemonByName(currentId)
+  return {
+    title: pokemon.title,
+    openGraph: {
+      images: pokemon?.sprites?.other?.home?.front_default,
+    },
+  }
 }
 
 const Pokedex = async ({ params }: PokedexProps) => {
@@ -23,38 +35,15 @@ const Pokedex = async ({ params }: PokedexProps) => {
   const favorites = cookies().get("favorites")
 
   return (
-    <>
-      <Head>
-        <meta property="og:title" content={pokemon.name} />
-        <meta property="og:description" content={"Visit The Pokedex"} />
-        <meta
-          property="og:image"
-          content={pokemon?.sprites?.other?.home?.front_default}
-        />
-        <meta
-          property="og:url"
-          content={`https://pokedex-culturalmass.vercel.app/pokedex/${params}`}
-        />
-        <meta property="og:type" content="website" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pokemon.name} />
-        <meta name="twitter:description" content={"Visit The Pokedex"} />
-        <meta
-          name="twitter:image"
-          content={pokemon?.sprites?.other?.home?.front_default}
-        />
-      </Head>
-      <div className="h-[650px] w-screen">
-        <Scene
-          user={user}
-          id={pokemon.id}
-          limit={limit}
-          sticker={sticker}
-          favorites={favorites}
-        />
-      </div>
-    </>
+    <div className="h-[650px] w-screen">
+      <Scene
+        user={user}
+        id={pokemon.id}
+        limit={limit}
+        sticker={sticker}
+        favorites={favorites}
+      />
+    </div>
   )
 }
 export default Pokedex
