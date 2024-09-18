@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import { Advent_Pro } from "next/font/google";
-import AuthContext from "./context/AuthContext";
-import { ThemeProvider } from "./components/theme/theme-provider";
-import { Navbar } from "./components/navbar";
-import { Toaster } from "sonner";
-import "./globals.css";
+import type { Metadata } from "next"
+import { Advent_Pro } from "next/font/google"
+import AuthContext from "./context/AuthContext"
+import { ThemeProvider } from "./components/theme/theme-provider"
+import { Navbar } from "./components/navbar"
+import { Toaster } from "sonner"
+import "./globals.css"
 
-const advent = Advent_Pro({ subsets: ["latin"] });
+const advent = Advent_Pro({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Pokedex",
   description: "A Pokedex with a twist!",
-};
+}
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <html lang="en">
@@ -34,5 +34,5 @@ export default function RootLayout({
         </AuthContext>
       </body>
     </html>
-  );
+  )
 }

@@ -1,25 +1,26 @@
-"use server";
-import getCurrentUser from "@/actions/getCurrentUser";
-import { cookies } from "next/headers";
-import Scene from "../../components/escene";
-import { getPokemonByName } from "@/actions/getPokemon";
+"use server"
+import getCurrentUser from "@/actions/getCurrentUser"
+import { cookies } from "next/headers"
+import Scene from "../../components/escene"
+import { getPokemonByName } from "@/actions/getPokemon"
+import { useEffect } from "react"
 
 interface PokedexProps {
-  params: { id: string };
+  params: { id: string }
 }
 
 const Pokedex = async ({ params }: PokedexProps) => {
-  const currentId = params?.id?.toString().split("%")[0];
-  const limit = params?.id?.toString().split("3D")[1];
-  let id;
+  const currentId = params?.id?.toString().split("%")[0]
+  const limit = params?.id?.toString().split("3D")[1]
+  let id
   if (!Number.isInteger(currentId)) {
-    let pokemon = await getPokemonByName(currentId);
-    id = pokemon.id;
+    let pokemon = await getPokemonByName(currentId)
+    id = pokemon.id
   }
-  const user = await getCurrentUser();
+  const user = await getCurrentUser()
 
-  const sticker = cookies().get("sticker");
-  const favorites = cookies().get("favorites");
+  const sticker = cookies().get("sticker")
+  const favorites = cookies().get("favorites")
 
   return (
     <div className="h-[650px] w-screen">
@@ -31,6 +32,6 @@ const Pokedex = async ({ params }: PokedexProps) => {
         favorites={favorites}
       />
     </div>
-  );
-};
-export default Pokedex;
+  )
+}
+export default Pokedex
