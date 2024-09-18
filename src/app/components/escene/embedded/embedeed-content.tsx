@@ -10,9 +10,7 @@ import { LeftPanelButtons } from "./components/left-panel-buttons"
 import { RigthPanelMenu } from "./components/rigth-panel-menu"
 import { RightPanelButtons } from "./components/rigth-panel-buttons"
 import { toast } from "sonner"
-
 import { evolutionProps, pokemonProps, speciesProps } from "@/types/pokemon"
-import Head from "next/head"
 
 export enum Screens {
   infoA = "infoA",
@@ -169,86 +167,66 @@ const EmbedeedContent = ({
   }, [id, router])
 
   return (
-    <>
-      <Head>
-        <meta property="og:title" content={pokemon.name} />
-        <meta property="og:description" content={"Visit The Pokedex"} />
-        <meta
-          property="og:image"
-          content={pokemon?.sprites?.other?.home?.front_default}
-        />
-        <meta property="og:url" content={window.location.href} />
-        <meta property="og:type" content="website" />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pokemon.name} />
-        <meta name="twitter:description" content={"Visit The Pokedex"} />
-        <meta
-          name="twitter:image"
-          content={pokemon?.sprites?.other?.home?.front_default}
-        />
-      </Head>
-      <div className="flex w-[350px] h-[200px] mt-[8px] 2xl:mt-[8px]">
-        <div className="flex flex-col h-[190px]">
-          <div className="relative flex items-center justify-center select-none pointer-events-none ml-[32px] mt-[24px] h-[60px] w-[105px]">
-            {isLoading ? (
-              <span className=" text-[10px] text-muted-foreground">
-                Loading Pokemon image...
-              </span>
-            ) : (
-              <LeftPanelDisplay pokemon={pokemon} />
-            )}
-          </div>
-          <div className="flex mt-[22px] ml-[7px] h-[80px] w-[140px]">
-            <LeftPanelButtons
-              pokemon={pokemon}
-              id={id}
-              handleChangeId={handleChangeId}
-              currentLimit={currentLimit}
-            />
-          </div>
-        </div>
-        <div className="flex flex-col">
+    <div className="flex w-[350px] h-[200px] mt-[8px] 2xl:mt-[8px]">
+      <div className="flex flex-col h-[190px]">
+        <div className="relative flex items-center justify-center select-none pointer-events-none ml-[32px] mt-[24px] h-[60px] w-[105px]">
           {isLoading ? (
-            <div
-              className={
-                "flex justify-center items-center select-none pointer-events-none rounded-[6px] ml-[50px] mt-4 h-[50px] w-[107px]"
-              }
-            >
-              <span className=" text-[8px] text-muted-foreground">
-                Loading Pokemon data...
-              </span>
-            </div>
+            <span className=" text-[10px] text-muted-foreground">
+              Loading Pokemon image...
+            </span>
           ) : (
-            <RigthPanelScreen
-              pokemon={pokemon}
-              species={species}
-              evolution={evolution}
-              screen={screen}
-              ligth={ligth}
-            />
+            <LeftPanelDisplay pokemon={pokemon} />
           )}
-          <div className="flex ml-[50px] mt-[5px]  h-[32px] w-[125px]">
-            <RigthPanelMenu
-              screen={screen}
-              handleChangeScreen={handleChangeScreen}
-            />
-          </div>
-          <div className="flex flex-col h-[75px] ml-[46px] w-[140px] mt-[1.3px]">
-            <RightPanelButtons
-              user={user}
-              id={id}
-              species={species}
-              screen={screen}
-              handleChangeScreen={handleChangeScreen}
-              setLigth={setLigth}
-              handleBack={handleBack}
-              favorites={favorites}
-            />
-          </div>
+        </div>
+        <div className="flex mt-[22px] ml-[7px] h-[80px] w-[140px]">
+          <LeftPanelButtons
+            pokemon={pokemon}
+            id={id}
+            handleChangeId={handleChangeId}
+            currentLimit={currentLimit}
+          />
         </div>
       </div>
-    </>
+      <div className="flex flex-col">
+        {isLoading ? (
+          <div
+            className={
+              "flex justify-center items-center select-none pointer-events-none rounded-[6px] ml-[50px] mt-4 h-[50px] w-[107px]"
+            }
+          >
+            <span className=" text-[8px] text-muted-foreground">
+              Loading Pokemon data...
+            </span>
+          </div>
+        ) : (
+          <RigthPanelScreen
+            pokemon={pokemon}
+            species={species}
+            evolution={evolution}
+            screen={screen}
+            ligth={ligth}
+          />
+        )}
+        <div className="flex ml-[50px] mt-[5px]  h-[32px] w-[125px]">
+          <RigthPanelMenu
+            screen={screen}
+            handleChangeScreen={handleChangeScreen}
+          />
+        </div>
+        <div className="flex flex-col h-[75px] ml-[46px] w-[140px] mt-[1.3px]">
+          <RightPanelButtons
+            user={user}
+            id={id}
+            species={species}
+            screen={screen}
+            handleChangeScreen={handleChangeScreen}
+            setLigth={setLigth}
+            handleBack={handleBack}
+            favorites={favorites}
+          />
+        </div>
+      </div>
+    </div>
   )
 }
 
